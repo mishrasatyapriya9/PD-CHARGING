@@ -33,6 +33,7 @@ export const createDevice = async (req, res) => {
     device_name,
     brand,
     model,
+    device_type,
     fast_pd_compatible,
     power_rating,
   } = req.body;
@@ -42,6 +43,7 @@ export const createDevice = async (req, res) => {
     device_name,
     brand,
     model,
+    device_type,
     fast_pd_compatible,
     power_rating,
   });
