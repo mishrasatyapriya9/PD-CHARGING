@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const deviceSchema = new mongoose.Schema({
   device_image: {
     type: String,
-    required: false,
   },
   device_name: {
     type: String,
