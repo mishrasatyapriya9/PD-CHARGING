@@ -20,13 +20,6 @@ const app = express();
 //middleware
 app.use(cors());
 
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Replace with your frontend URL
-    credentials: true, // If you are using cookies or sessions
-  })
-);
-
 app.use(express.json());
 //now we can send json data in req and res
 app.use(morgan("dev"));
