@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import VITE_BACKEND_API from "../config/config.js";
 const AdminPanel = () => {
   const [devices, setDevices] = useState([]);
   const [editingDevice, setEditingDevice] = useState(null);
@@ -16,10 +16,11 @@ const AdminPanel = () => {
   const [showEditModal, setShowEditModal] = useState(false); // New state for modal
 
   useEffect(() => {
+    console.log(VITE_BACKEND_API);
     const fetchDevices = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_API}/api/v1/devices/getAllDevice`
+          `${VITE_BACKEND_API}/api/v1/devices/getAllDevice`
         );
 
         setDevices(response.data);
