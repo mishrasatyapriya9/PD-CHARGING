@@ -129,10 +129,12 @@ const App = () => {
 
         <main className="p-4">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/device/:id" element={<DeviceDetails />} />
             <Route path="/admin" element={<AdminPanel />} />
-            <Route path="/devices/:type" element={<DeviceList/>} />
+
+            <Route path="/device/:id" element={<DeviceDetails />} />
+
+            <Route path="/devices/:type" element={<DeviceList />} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </main>
       </div>
