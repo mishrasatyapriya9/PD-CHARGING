@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const deviceSchema = new mongoose.Schema({
   device_image: {
     type: String,
-    required: false,
   },
   device_name: {
     type: String,
@@ -33,7 +32,6 @@ const deviceSchema = new mongoose.Schema({
 
 export default mongoose.model("Devices", deviceSchema);
 
-
 //Example Device
 // {
 //     "device_image": "images/hp_pavilion_14.png",
@@ -43,4 +41,3 @@ export default mongoose.model("Devices", deviceSchema);
 //     "fast_pd_compatible": 1,
 //     "power_rating": "45W"
 // }
-

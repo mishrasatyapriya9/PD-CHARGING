@@ -33,6 +33,7 @@ export const createDevice = async (req, res) => {
     device_name,
     brand,
     model,
+    device_type,
     fast_pd_compatible,
     power_rating,
   } = req.body;
@@ -42,6 +43,7 @@ export const createDevice = async (req, res) => {
     device_name,
     brand,
     model,
+    device_type,
     fast_pd_compatible,
     power_rating,
   });
@@ -54,22 +56,22 @@ export const createDevice = async (req, res) => {
   }
 };
 export const testTest = async (req, res) => {
-    try {
-        res.send("<h1>hii welcome to PD_charging_Device_Checking webapp</h1>");
-    } catch (error) {
-        res.status(600).send({
-            success: false,
-            message: "error in testing",
-            error
-        })
-    }
-}
+  try {
+    res.send("<h1>hii welcome to PD_charging_Device_Checking webapp</h1>");
+  } catch (error) {
+    res.status(600).send({
+      success: false,
+      message: "error in testing",
+      error,
+    });
+  }
+};
 // Get a single device by ID
 export const getDeviceById = async (req, res) => {
-    try {
-      console.log("hii")
+  try {
+    console.log("hii");
     const device = await Device.findById(req.params.id);
-    if (!device) return res.status(404).json({ message: 'Device not found' });
+    if (!device) return res.status(404).json({ message: "Device not found" });
     res.status(200).json(device);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -83,7 +85,8 @@ export const updateDevice = async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     );
-    if (!updatedDevice) return res.status(404).json({ message: 'Device not found' });
+    if (!updatedDevice)
+      return res.status(404).json({ message: "Device not found" });
     res.status(200).json(updatedDevice);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -94,18 +97,19 @@ export const updateDevice = async (req, res) => {
 export const deleteDevice = async (req, res) => {
   try {
     const deletedDevice = await Device.findByIdAndDelete(req.params.id);
-    if (!deletedDevice) return res.status(404).json({ message: 'Device not found' });
-    res.status(200).json({ message: 'Device deleted successfully' });
+    if (!deletedDevice)
+      return res.status(404).json({ message: "Device not found" });
+    res.status(200).json({ message: "Device deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 //get devices acording to the devicetypes
 export const deviceType = async (req, res) => {
-   try {
-     const devices = await Device.find({ device_type: req.params.type });
-     res.json(devices);
-   } catch (err) {
-     res.status(500).json({ message: err.message });
-   }
-}
+  try {
+    const devices = await Device.find({ device_type: req.params.type });
+    res.json(devices);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
