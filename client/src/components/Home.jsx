@@ -1,13 +1,22 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 import laptopImg from "../assets/laptop.jpg";
 import phoneImg from "../assets/mobile.jpg";
 import tabletImg from "../assets/tablet.jpg";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (type) => {
+    navigate(`/devices/${type}`);
+  };
+
   return (
     <div className="p-4">
       <div className="flex flex-col space-y-4 md:space-y-6 lg:space-y-8">
-        <div className="bg-gray-200  p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between">
+        <div
+          onClick={() => handleCardClick("laptop")}
+          className="bg-gray-200 p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between cursor-pointer"
+        >
           <img
             src={laptopImg}
             alt="Laptop"
@@ -18,7 +27,10 @@ const Home = () => {
           </h2>
         </div>
 
-        <div className="bg-gray-200 p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between">
+        <div
+          onClick={() => handleCardClick("mobile")}
+          className="bg-gray-200 p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between cursor-pointer"
+        >
           <img
             src={phoneImg}
             alt="Phone"
@@ -28,7 +40,11 @@ const Home = () => {
             Phone
           </h2>
         </div>
-        <div className="bg-gray-200 p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between">
+
+        <div
+          onClick={() => handleCardClick("tablet")}
+          className="bg-gray-200 p-4 rounded md:p-6 lg:p-8 h-80 flex flex-col justify-between cursor-pointer"
+        >
           <img
             src={tabletImg}
             alt="Tablet"

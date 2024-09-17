@@ -97,7 +97,7 @@ import SearchPopup from "./components/SearchPopup";
 import Home from "./components/Home";
 import DeviceDetails from "./components/DeviceDetails";
 import AdminPanel from "./components/AdminPanel";
-
+import DeviceList from "./components/DeviceList";
 const App = () => {
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -132,6 +132,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/device/:id" element={<DeviceDetails />} />
             <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/devices/:type" element={<DeviceList/>} />
           </Routes>
         </main>
       </div>
