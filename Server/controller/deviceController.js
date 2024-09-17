@@ -109,3 +109,30 @@ export const deviceType = async (req, res) => {
      res.status(500).json({ message: err.message });
    }
 }
+
+//search devices
+export const searchDevices = async (req, res) => {
+  const { query } = req.query;
+
+  if (!query || query.length < 3) {
+    return res.status(400).json({ message: "Query too short." });
+  }
+
+  try {
+    // Perform a case-insensitive search for devices based on the device name or brand
+    const devices = await Device.find({
+      $or: [
+        { device_name: { $regex: query, $options: "i" } },
+        { brand: { $regex: query, $options: "i" } },
+      ],
+    }).limit(10); // Limit results to avoid overloading the client
+
+    if (devices.length === 0) {
+      return res.status(404).json({ message: "No devices found." });
+    }
+    res.status(200).json(devices);
+  } catch (error) {
+    console.error("Error fetching devices:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

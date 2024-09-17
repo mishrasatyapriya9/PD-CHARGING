@@ -15,8 +15,6 @@ const DeviceList = () => {
           }/api/v1/devices/deviceType/${type}`
         );
         setDevices(response.data);
-        console.log(response);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching devices:", error);
       }
