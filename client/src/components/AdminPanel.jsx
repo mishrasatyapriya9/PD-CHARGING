@@ -23,6 +23,7 @@ const AdminPanel = () => {
         );
 
         setDevices(response.data);
+        console.log(response);
       } catch (error) {
         console.error("Error fetching devices", error);
       }
@@ -31,10 +32,28 @@ const AdminPanel = () => {
   }, []);
 
   const handleUpdate = async () => {
+    const updatedDeviceData = {
+      ...editingDevice,
+      fast_pd_compatible:
+        editingDevice.fast_pd_compatible === "Yes" ||
+        editingDevice.fast_pd_compatible === true
+          ? 1
+          : 0, // Ensure fast_pd_compatible is a boolean or 0/1
+    };
+
     try {
-      await axios.put(`/api/devices/${editingDevice.id}`, editingDevice);
+      // Use `editingDevice._id` to get the device ID for the update
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_API}/api/v1/devices/deviceUpdate/${
+          editingDevice._id
+        }`,
+        updatedDeviceData
+      );
+
       setDevices(
-        devices.map((d) => (d.id === editingDevice.id ? editingDevice : d))
+        devices.map((d) =>
+          d._id === editingDevice._id ? updatedDeviceData : d
+        )
       );
       setShowEditModal(false); // Close modal after saving
     } catch (error) {
@@ -44,8 +63,13 @@ const AdminPanel = () => {
 
   const handleDelete = async (deviceId) => {
     try {
-      await axios.delete(`/api/devices/${deviceId}`);
-      setDevices(devices.filter((d) => d.id !== deviceId));
+      await axios.delete(
+        `${
+          import.meta.env.VITE_BACKEND_API
+        }/api/v1/devices/deviceDelete/${deviceId}`
+      );
+
+      setDevices(devices.filter((d) => d._id !== deviceId));
     } catch (error) {
       console.error("Error deleting device", error);
     }
@@ -190,7 +214,7 @@ const AdminPanel = () => {
               Edit
             </button>
             <button
-              onClick={() => handleDelete(device.id)}
+              onClick={() => handleDelete(device._id)}
               className="ml-2 text-red-500"
             >
               Delete

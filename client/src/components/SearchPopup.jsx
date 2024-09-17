@@ -1,53 +1,4 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-
-// const SearchPopup = ({ isOpen, onClose }) => {
-//   const [query, setQuery] = useState("");
-//   const [suggestions, setSuggestions] = useState([]);
-
-//   const handleSearch = async (e) => {
-//     setQuery(e.target.value);
-//     if (query.length > 2) {
-//       try {
-//         const response = await axios.get(`/api/search?query=${query}`);
-//         setSuggestions(response.data);
-//       } catch (error) {
-//         console.error("Error fetching search results", error);
-//       }
-//     } else {
-//       setSuggestions([]);
-//     }
-//   };
-
-//   return isOpen ? (
-//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-//       <div className="bg-white p-4 rounded">
-//         <input
-//           type="text"
-//           value={query}
-//           onChange={handleSearch}
-//           placeholder="Search for devices..."
-//           className="border border-gray-300 p-2 rounded"
-//         />
-//         <button onClick={onClose} className="ml-2 text-red-500">
-//           Close
-//         </button>
-//         <ul>
-//           {suggestions.map((device) => (
-//             <li key={device.id}>
-//               {device.device_name} - Fast PD:{" "}
-//               {device.fast_pd_compatible ? "Yes" : "No"}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     </div>
-//   ) : null;
-// };
-
-// export default SearchPopup;
-
-// import React, { useState } from "react";
+// import { useState } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
@@ -59,18 +10,25 @@
 
 //   // Fetch suggestions from the backend
 //   const handleSearch = async (e) => {
-//     setQuery(e.target.value);
-//     if (e.target.value.length > 2) {
+//     const searchQuery = e.target.value;
+//     setQuery(searchQuery);
+
+//     if (searchQuery.length > 2) {
 //       try {
 //         const response = await axios.get(
-//           `${import.meta.VITE_BACKEND_API}/api/v1/devices/search?query=${
-//             e.target.value
-//           }`
+//           `${
+//             import.meta.env.VITE_BACKEND_API
+//           }/api/v1/devices/search?query=${searchQuery}`
 //         );
-//         setSuggestions(response.data);
-//         console.log(suggestions);
+//         if (Array.isArray(response.data)) {
+//           setSuggestions(response.data);
+//         } else {
+//           console.error("Expected an array, but received:", response.data);
+//           setSuggestions([]); // Reset to an empty array on error
+//         }
 //       } catch (error) {
 //         console.error("Error fetching search results", error);
+//         setSuggestions([]); // Reset to an empty array on error
 //       }
 //     } else {
 //       setSuggestions([]);
@@ -87,13 +45,13 @@
 //   // Navigate to the details page when the button is clicked
 //   const handleViewDetails = () => {
 //     if (selectedDevice) {
-//       navigate(`/device/${selectedDevice.id}`);
+//       navigate(`/device/${selectedDevice._id}`);
 //       onClose(); // Close the popup
 //     }
 //   };
 
 //   return isOpen ? (
-//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+//     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 absolute">
 //       <div className="bg-white p-4 rounded w-96">
 //         <input
 //           type="text"
@@ -106,7 +64,7 @@
 //           <ul className="border border-gray-300 mt-2 max-h-40 overflow-y-auto rounded">
 //             {suggestions.map((device) => (
 //               <li
-//                 key={device.id}
+//                 key={device._id}
 //                 onClick={() => handleSelectDevice(device)}
 //                 className="cursor-pointer p-2 hover:bg-gray-100"
 //               >
@@ -141,38 +99,40 @@
 
 // export default SearchPopup;
 
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SearchPopup = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]); // Ensure this is initialized as an array
+  const [suggestions, setSuggestions] = useState([]);
   const [selectedDevice, setSelectedDevice] = useState(null);
   const navigate = useNavigate();
 
   // Fetch suggestions from the backend
   const handleSearch = async (e) => {
-    setQuery(e.target.value);
-    if (e.target.value.length > 2) {
+    const searchQuery = e.target.value;
+    setQuery(searchQuery);
+
+    if (searchQuery.length > 2) {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_API}/api/v1/devices/search?query=${
-            e.target.value
-          }`
+          `${
+            import.meta.env.VITE_BACKEND_API
+          }/api/v1/devices/search?query=${searchQuery}`
         );
-        // Ensure the response data is an array
         if (Array.isArray(response.data)) {
           setSuggestions(response.data);
         } else {
-          setSuggestions([]); // Fallback to empty array if data is not an array
+          console.error("Expected an array, but received:", response.data);
+          setSuggestions([]); // Reset to an empty array on error
         }
       } catch (error) {
         console.error("Error fetching search results", error);
-        setSuggestions([]); // Fallback to empty array in case of an error
+        setSuggestions([]); // Reset to an empty array on error
       }
     } else {
-      setSuggestions([]); // Reset suggestions if query is too short
+      setSuggestions([]);
     }
   };
 
@@ -186,14 +146,19 @@ const SearchPopup = ({ isOpen, onClose }) => {
   // Navigate to the details page when the button is clicked
   const handleViewDetails = () => {
     if (selectedDevice) {
-      navigate(`/device/${selectedDevice.id}`);
+      navigate(`/device/${selectedDevice._id}`);
       onClose(); // Close the popup
     }
   };
 
   return isOpen ? (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-4 rounded w-96">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" // Higher z-index for the overlay
+      style={{ zIndex: 9999 }} // Inline style to ensure it has the highest z-index
+    >
+      <div className="bg-white p-4 rounded w-96 relative z-50">
+        {" "}
+        {/* z-50 ensures the popup content is above the overlay */}
         <input
           type="text"
           value={query}
@@ -202,10 +167,10 @@ const SearchPopup = ({ isOpen, onClose }) => {
           className="border border-gray-300 p-2 rounded w-full"
         />
         {suggestions.length > 0 && (
-          <ul className="border border-gray-300 mt-2 max-h-40 overflow-y-auto rounded">
+          <ul className="absolute left-0 top-12 border border-gray-300 bg-white mt-2 w-full max-h-40 overflow-y-auto rounded shadow-lg z-50">
             {suggestions.map((device) => (
               <li
-                key={device.id}
+                key={device._id}
                 onClick={() => handleSelectDevice(device)}
                 className="cursor-pointer p-2 hover:bg-gray-100"
               >
