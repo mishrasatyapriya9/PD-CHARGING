@@ -45,9 +45,7 @@ const AdminPanel = () => {
     try {
       // Use `editingDevice._id` to get the device ID for the update
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_API}/api/v1/devices/deviceUpdate/${
-          editingDevice._id
-        }`,
+        `${VITE_BACKEND_API}/api/v1/devices/deviceUpdate/${editingDevice._id}`,
         updatedDeviceData
       );
 
@@ -65,9 +63,7 @@ const AdminPanel = () => {
   const handleDelete = async (deviceId) => {
     try {
       await axios.delete(
-        `${
-          import.meta.env.VITE_BACKEND_API
-        }/api/v1/devices/deviceDelete/${deviceId}`
+        `${VITE_BACKEND_API}/api/v1/devices/deviceDelete/${deviceId}`
       );
 
       setDevices(devices.filter((d) => d._id !== deviceId));
@@ -85,7 +81,7 @@ const AdminPanel = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_API}/api/v1/devices/addDevice`,
+        `${VITE_BACKEND_API}/api/v1/devices/addDevice`,
         newDeviceData
       );
 

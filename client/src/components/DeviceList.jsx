@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import VITE_BACKEND_API from "../config/config";
 
 const DeviceList = () => {
   const { type } = useParams(); // Get device type from URL
@@ -10,9 +11,7 @@ const DeviceList = () => {
     const fetchDevices = async () => {
       try {
         const response = await axios.get(
-          `${
-            import.meta.env.VITE_BACKEND_API
-          }/api/v1/devices/deviceType/${type}`
+          `${VITE_BACKEND_API}/api/v1/devices/deviceType/${type}`
         );
         setDevices(response.data);
         console.log(response);
